@@ -18,7 +18,7 @@ public class WordLoader {
 		try {
 			r = new FileReader(file);
 			br = new BufferedReader(r);
-			
+
 			String line = br.readLine();
 			while (line != null) {
 				words.add(line);
@@ -33,6 +33,13 @@ public class WordLoader {
 			}
 		}
 		return words;
+	}
+
+	public String getWord() throws IOException {
+		int i = (int) Math.round((100 * Math.random()) / 2);
+		ArrayList<String> words = load();
+		String word = words.get(i);
+		return word;
 	}
 
 }
