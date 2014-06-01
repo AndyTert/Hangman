@@ -1,23 +1,15 @@
 package hangman.controller;
 
+import hangman.loader.ScannerWordLoader;
 import hangman.loader.WordLoader;
-import hangman.model.HMWord;
 
 import java.util.Scanner;
 
 public class ScannerGameController extends GameController {
-	private HMWord word;
-
 	private Scanner sc = new Scanner(System.in);
 
 	public ScannerGameController() {
-		WordLoader w1 = new WordLoader();
-		try {
-			String wordString = w1.getWord();
-			word = new HMWord(wordString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		loadWord();
 	}
 
 	private void printHangman() {
@@ -66,14 +58,16 @@ public class ScannerGameController extends GameController {
 	}
 
 	public void run() {
+		
+		
 		while (canContinue()) {
-			System.out.println(word.getWord());
+//			System.out.println(word.getWord());
 			printHangman();
 			printLetters();
 
 			System.out.print("\n\nPlease guess a letter!:");
 			String guess = sc.next();
-			char guessChar = validateGuess(guess);
+			char guessChar = validate(guess);
 			word.checkGuess(guessChar);
 		}
 		printHangman();
@@ -82,23 +76,36 @@ public class ScannerGameController extends GameController {
 	}
 
 	private boolean canContinue() {
-		boolean cont = false;
-		if (word.containsUnderscores()) {
-			cont = true;
-		} 
-		if (word.getWrongLettersSize() == 6) {
-			cont = false;
-		}
-
-		return cont;
+		return word.canContinue();
 	}
 
-	private char validateGuess(String guess) {
+	private char validate(String guess) {
+		char guessChar = validateGuessIsALetter(guess);
+		guessChar = validateUnusedLetter(guessChar);
+		return guessChar;
+	}
+
+	private char validateUnusedLetter(char guess) {
+		while(word.isLetterUsed(guess)) {
+			System.out.println("This letter has already been guessed. Please enter a new, unused letter: ");
+			String temp = sc.next();
+			validateGuessIsALetter(temp);
+			guess = temp.charAt(0);
+		}
+		return guess;
+	}
+	
+	private char validateGuessIsALetter(String guess) {
 		while (guess.length() > 1) {
 			System.out.println("Please only enter one character:");
 			guess = sc.next();
 		}
 		return guess.charAt(0);
+	}
+
+	@Override
+	public WordLoader getWordLoader() {
+		return new ScannerWordLoader();
 	}
 
 }

@@ -2,6 +2,7 @@ package hangman.test;
 
 import java.util.ArrayList;
 
+import hangman.loader.ScannerWordLoader;
 import hangman.loader.WordLoader;
 import junit.framework.TestCase;
 
@@ -9,7 +10,7 @@ public class WordLoaderTest extends TestCase {
 
 	public void testWordLoader() throws Exception {
 		// setup
-		WordLoader wl = new WordLoader();
+		ScannerWordLoader wl = new ScannerWordLoader();
 
 		// execute
 		ArrayList<String> words = wl.load();
@@ -20,7 +21,7 @@ public class WordLoaderTest extends TestCase {
 
 	public void testGetWord() throws Exception {
 		// setup
-		WordLoader w1 = new WordLoader();
+		WordLoader w1 = new ScannerWordLoader();
 
 		// execute
 		String word = w1.getWord();

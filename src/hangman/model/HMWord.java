@@ -3,7 +3,7 @@ package hangman.model;
 import java.util.ArrayList;
 
 public class HMWord {
-	private final char UNDERSCORE = '_'; // 95
+	private final char UNDERSCORE = 95; // _
 
 	private String word;
 	private ArrayList<Character> placeholder;
@@ -23,11 +23,11 @@ public class HMWord {
 
 	public void checkGuess(char guess) {
 		if (word.contains(Character.toString(guess))) {
-			for(int i = 0; i<length; i++) {
+			for (int i = 0; i < length; i++) {
 				char temp = word.charAt(i);
-				if(temp == guess) {
+				if (temp == guess) {
 					placeholder.set(i, guess);
-				}				
+				}
 			}
 		} else {
 			wrongLetters.add(guess);
@@ -81,7 +81,7 @@ public class HMWord {
 
 	public boolean containsUnderscores() {
 		boolean contains = false;
-		if(placeholder.contains(UNDERSCORE)) {
+		if (placeholder.contains(UNDERSCORE)) {
 			contains = true;
 		}
 		return contains;
@@ -89,11 +89,34 @@ public class HMWord {
 
 	public String printWinOrLose() {
 		String result;
-		if(!containsUnderscores()) {
+		if (!containsUnderscores()) {
 			result = "YOU WIN!!";
-		}else {
+		} else {
 			result = "You're a loser...the word was: " + word;
 		}
 		return result;
+	}
+
+	public boolean isLetterUsed(char guess) {
+		boolean result = false;
+		boolean containsInPlaceholder = placeholder.contains(guess);
+		boolean containsInWrongLetters = wrongLetters.contains(guess);
+//		System.out.println("PH: " + containsInPlaceholder);
+//		System.out.println("WL: " + containsInWrongLetters);
+		if (containsInPlaceholder || containsInWrongLetters) {
+			result = true;
+		}
+		return result;
+	}
+
+	public boolean canContinue() {
+		boolean cont = false;
+		if (containsUnderscores()) {
+			cont = true;
+		} 
+		if (getWrongLettersSize() == 6) {
+			cont = false;
+		}
+		return cont;
 	}
 }
